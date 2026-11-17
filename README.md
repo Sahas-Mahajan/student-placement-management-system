@@ -4,7 +4,7 @@ A robust, enterprise-structured console application built with **Core Java (Java
 
 ---
 
-## Key Technical Highlights (Resume-Ready)
+## Key Technical Highlights
 
 - **Pure Core Java + JDBC Architecture**: Zero framework dependencies; demonstrates foundational fluency in Java SE, standard collection frameworks, and JDBC 4.2+ APIs.
 - **SQL Injection Prevention**: 100% of SQL interactions utilize `PreparedStatement` with parameterized placeholders (`?`).
@@ -112,12 +112,6 @@ Student Placement Management System/
 │
 ├── lib/                                       # Directory for mysql-connector-j-*.jar
 │
-├── compile.bat                                # Windows build script
-├── run.bat                                    # Windows launcher script
-├── compile.sh                                 # Linux/macOS build script
-├── run.sh                                     # Linux/macOS launcher script
-├── setup_db.bat                               # Automated MySQL schema importer
-├── download_connector.bat                     # Automatic driver download utility
 └── README.md                                  # Complete system documentation
 ```
 
@@ -155,7 +149,6 @@ Before any student can apply for a company, `PlacementService.applyForCompany()`
    ```bash
    mysql -u root -p < sql/schema.sql
    ```
-   *(Or on Windows, simply double-click `setup_db.bat`)*
 
 2. Open `resources/db.properties` and verify your credentials:
    ```properties
@@ -168,38 +161,22 @@ Before any student can apply for a company, `PlacementService.applyForCompany()`
 ### 3. Add MySQL Connector JAR
 
 Place `mysql-connector-j-8.3.0.jar` into the `lib/` directory:
-- Run `download_connector.bat` (Windows), OR
 - Download manually from [Maven Central - MySQL Connector/J](https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.3.0/mysql-connector-j-8.3.0.jar) and save it inside `lib/`.
 
 ### 4. Compile the Application
 
-#### Windows (Command Prompt / PowerShell):
+#### (Command Prompt / PowerShell):
 ```cmd
 javac -d bin -sourcepath src src/com/placement/main/MainApp.java
 copy /Y resources\db.properties bin\db.properties
 ```
-*(Or run `compile.bat`)*
-
-#### Linux / macOS:
-```bash
-chmod +x compile.sh run.sh
-./compile.sh
-```
 
 ### 5. Run the Application
 
-#### Windows (Command Prompt / PowerShell):
+#### (Command Prompt / PowerShell):
 ```cmd
 java -cp "bin;resources;lib/*" com.placement.main.MainApp
 ```
-*(Or run `run.bat`)*
-
-#### Linux / macOS:
-```bash
-java -cp "bin:resources:lib/*" com.placement.main.MainApp
-```
-*(Or run `./run.sh`)*
-
 ---
 
 ## Sample Multi-Table INNER JOIN Queries
@@ -298,17 +275,3 @@ WHERE a.status = 'ACCEPTED';
 ```
 
 ---
-
-## Defensive Programming Standards Applied
-
-1. **Thread-Safe Singleton Connection Manager**:
-   - Uses double-checked locking with `volatile` instance variable in `DBConnection`.
-   - Dynamic configuration loader supporting both classpath and filesystem fallbacks.
-2. **Leak-Free Resource Management**:
-   - Every single database call encapsulates `Connection`, `PreparedStatement`, and `ResultSet` within `try-with-resources`.
-3. **Crash-Proof Console Input**:
-   - Custom scanner reader methods handle non-numeric input gracefully, looping until valid input is received instead of throwing unhandled `InputMismatchException`s.
-4. **Data Integrity & Relational Constraints**:
-   - Database level `CHECK` constraints on CGPA (0.00-10.00) and percentages (0.00-100.00).
-   - `UNIQUE` compound index on `(student_id, company_id)` preventing duplicate applications at the engine level.
-   - Foreign key constraints with `ON DELETE CASCADE`.
